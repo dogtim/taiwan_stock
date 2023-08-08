@@ -14,7 +14,7 @@ interface StockApiService {
 
 }
 
-fun StockDataResponse.closingPrice(): String {
+public fun StockDataResponse.closingPrice(): String {
     return data[data.size - 2].last()
 }
 

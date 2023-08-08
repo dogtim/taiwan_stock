@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tim.taiwanstock.R
+import com.tim.taiwanstock.network.StockDataResponse
+import com.tim.taiwanstock.network.closingPrice
 import com.tim.taiwanstock.ui.stocks.compose.BasicsCodelabTheme
 
 
@@ -52,13 +55,13 @@ fun MyApp(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Stock(modifier: Modifier = Modifier, viewModel: StocksViewModel = StocksViewModel(), names: List<String> = List(1) { "$it" }) {
+fun Stock(modifier: Modifier = Modifier, viewModel: StocksViewModel = StocksViewModel()) {
     viewModel.fetchItems()
-    val itemList = viewModel.itemList
+    val itemList: List<StockDataResponse> by viewModel.itemList.collectAsState()
 
     LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
-        items(items = names) { name ->
-            Greeting(name = itemList.title)
+        items(items = itemList) { name ->
+            StockInfo(name = name.title, price = name.closingPrice())
         }
     }
 }
@@ -104,6 +107,58 @@ private fun Greeting(name: String) {
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
         CardContent(name)
+    }
+}
+
+@Composable
+private fun StockInfo(name: String, price: String) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        ),
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+    ) {
+        var expanded by remember { mutableStateOf(false) }
+
+        Row(
+            modifier = Modifier
+                .padding(12.dp)
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                )
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(12.dp)
+            ) {
+                Text(text = name)
+                Text(
+                    text = price, style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                )
+                if (expanded) {
+                    Text(
+                        text = ("Composem ipsum color sit lazy, " +
+                                "padding theme elit, sed do bouncy. ").repeat(4),
+                    )
+                }
+            }
+            IconButton(onClick = { expanded = !expanded }) {
+                Icon(
+                    imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                    contentDescription = if (expanded) {
+                        stringResource(R.string.show_less)
+                    } else {
+                        stringResource(R.string.show_more)
+                    }
+                )
+            }
+        }
     }
 }
 

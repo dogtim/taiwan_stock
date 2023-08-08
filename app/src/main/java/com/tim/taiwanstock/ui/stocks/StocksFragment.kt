@@ -34,11 +34,7 @@ class StocksFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.stockData.observe(viewLifecycleOwner) { data ->
-            Log.d("Tim", "data: $data" )
-        }
-
-        viewModel.fetchStockData()
+        Log.d("Tim", "onViewCreated")
     }
 
 }
