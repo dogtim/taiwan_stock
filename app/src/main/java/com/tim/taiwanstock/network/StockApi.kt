@@ -14,6 +14,10 @@ interface StockApiService {
 
 }
 
+fun StockDataResponse.closingPrice(): String {
+    return data[data.size - 2].last()
+}
+
 data class StockDataResponse(
     val stat: String,
     val date: String,

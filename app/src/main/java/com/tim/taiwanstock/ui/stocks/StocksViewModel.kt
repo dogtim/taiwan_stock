@@ -12,6 +12,8 @@ import com.tim.taiwanstock.network.StockDataResponse
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class StocksViewModel : ViewModel() {
 
@@ -27,7 +29,7 @@ class StocksViewModel : ViewModel() {
     fun fetchStockData() {
         viewModelScope.launch {
             try {
-                val response = stockApiService.getStockData("20230801", "2330")
+                val response = stockApiService.getStockData(getCurrentFormattedDate(), "2330")
                 val size = response.data.size
                 _stockData.postValue(response.data[size - 2].last())
             } catch (e: Exception) {
@@ -43,11 +45,16 @@ class StocksViewModel : ViewModel() {
         viewModelScope.launch {
             // Update itemList with the fetched items
             try {
-                val response = stockApiService.getStockData("20230801", "2330")
+                val response = stockApiService.getStockData(getCurrentFormattedDate(), "2330")
                 itemList = response
             } catch (e: Exception) {
                 // Handle the error
             }
         }
+    }
+
+    fun getCurrentFormattedDate(): String {
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        return LocalDate.now().format(dateFormatter)
     }
 }

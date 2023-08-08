@@ -10,13 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.tim.taiwanstock.network.StockApiService
 import com.tim.taiwanstock.ui.stocks.compose.BasicsCodelabTheme
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 // TODO:
-// 1. Get stock price from internet
 // 2. List the top 10 weighted stock or companies
 // 3. Show the buy or sell wording
 class StocksFragment : Fragment() {
