@@ -4,36 +4,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.tim.taiwanstock.databinding.FragmentNotificationsBinding
+import com.tim.taiwanstock.ui.stocks.compose.BasicsCodelabTheme
 
+// TODO:
+// 1. Get stock price from internet
+// 2. List the top 10 weighted stock or companies
+// 3. Show the buy or sell wording
 class StocksFragment : Fragment() {
-
-    private var _binding: FragmentNotificationsBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val notificationsViewModel =
-            ViewModelProvider(this).get(StocksViewModel::class.java)
-
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textNotifications
-        notificationsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        return ComposeView(requireContext()).apply {
+            setContent {
+                BasicsCodelabTheme {
+                    MyApp(modifier = Modifier.fillMaxSize())
+                }
+            }
         }
-        return root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

@@ -3,4 +3,6 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="show_more">Show more</string>
+    <string name="show_less">Show less</string>
 </resources>
