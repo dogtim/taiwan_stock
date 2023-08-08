@@ -13,11 +13,9 @@ import androidx.fragment.app.viewModels
 import com.tim.taiwanstock.ui.stocks.compose.BasicsCodelabTheme
 
 // TODO:
-// 2. List the top 10 weighted stock or companies
-// 3. Show the buy or sell wording
+// Show the buy or sell wording
 class StocksFragment : Fragment() {
 
-    private val viewModel: StocksViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
