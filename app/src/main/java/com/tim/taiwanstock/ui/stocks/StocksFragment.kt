@@ -1,6 +1,7 @@
 package com.tim.taiwanstock.ui.stocks
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.tim.taiwanstock.network.StockApiService
 import com.tim.taiwanstock.ui.stocks.compose.BasicsCodelabTheme
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 // TODO:
 // 1. Get stock price from internet
@@ -16,6 +21,7 @@ import com.tim.taiwanstock.ui.stocks.compose.BasicsCodelabTheme
 // 3. Show the buy or sell wording
 class StocksFragment : Fragment() {
 
+    private val viewModel: StocksViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,5 +34,19 @@ class StocksFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.stockData.observe(viewLifecycleOwner) { data ->
+            Log.d("Tim", "data: $data" )
+        }
+
+        viewModel.fetchStockData()
+    }
+
+    fun get2330Price() {
+
+
     }
 }
