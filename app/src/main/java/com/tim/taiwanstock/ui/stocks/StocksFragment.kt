@@ -30,7 +30,7 @@ class StocksFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 BasicsCodelabTheme {
-                    MyApp(modifier = Modifier.fillMaxSize())
+                    Stock(modifier = Modifier.fillMaxSize())
                 }
             }
         }
@@ -45,8 +45,4 @@ class StocksFragment : Fragment() {
         viewModel.fetchStockData()
     }
 
-    fun get2330Price() {
-
-
-    }
 }

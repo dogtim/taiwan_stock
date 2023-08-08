@@ -52,6 +52,18 @@ fun MyApp(modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun Stock(modifier: Modifier = Modifier, viewModel: StocksViewModel = StocksViewModel(), names: List<String> = List(1) { "$it" }) {
+    viewModel.fetchItems()
+    val itemList = viewModel.itemList
+
+    LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
+        items(items = names) { name ->
+            Greeting(name = itemList.title)
+        }
+    }
+}
+
+@Composable
 fun OnboardingScreen(
     onContinueClicked: () -> Unit,
     modifier: Modifier = Modifier
