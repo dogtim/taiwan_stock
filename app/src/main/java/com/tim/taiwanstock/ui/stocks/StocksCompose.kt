@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.tim.taiwanstock.R
 import com.tim.taiwanstock.network.StockDataResponse
 import com.tim.taiwanstock.network.closingPrice
+import com.tim.taiwanstock.network.getInfo
 import com.tim.taiwanstock.ui.stocks.compose.BasicsCodelabTheme
 
 
@@ -61,7 +62,7 @@ fun Stock(modifier: Modifier = Modifier, viewModel: StocksViewModel = StocksView
 
     LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
         items(items = itemList) { name ->
-            StockInfo(name = name.title, price = name.closingPrice())
+            StockInfo(name = name.getInfo(), price = name.closingPrice())
         }
     }
 }

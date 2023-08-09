@@ -14,9 +14,20 @@ interface StockApiService {
 
 }
 
-public fun StockDataResponse.closingPrice(): String {
+fun StockDataResponse.closingPrice(): String {
     return data[data.size - 2].last()
 }
+
+fun StockDataResponse.getInfo(): String {
+    val parts = title.split(" ")
+    if (parts.size >= 3) {
+        val stockNumber = parts[1]
+        val stockName = parts[2]
+        return "$stockName ($stockNumber)"
+    }
+    return "Unknown (Unknown)"
+}
+
 
 data class StockDataResponse(
     val stat: String,

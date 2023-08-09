@@ -60,3 +60,8 @@ class StocksViewModel : ViewModel() {
         return LocalDate.now().format(dateFormatter)
     }
 }
+
+data class StockItem(
+    val id: String,
+    val closingPrice: String
+)
