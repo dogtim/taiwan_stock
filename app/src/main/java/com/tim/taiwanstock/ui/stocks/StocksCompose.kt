@@ -118,7 +118,6 @@ private fun StockInfo(name: String, price: String) {
         ),
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
-        var expanded by remember { mutableStateOf(false) }
 
         Row(
             modifier = Modifier
@@ -141,22 +140,7 @@ private fun StockInfo(name: String, price: String) {
                         fontWeight = FontWeight.ExtraBold
                     )
                 )
-                if (expanded) {
-                    Text(
-                        text = ("Composem ipsum color sit lazy, " +
-                                "padding theme elit, sed do bouncy. ").repeat(4),
-                    )
-                }
-            }
-            IconButton(onClick = { expanded = !expanded }) {
-                Icon(
-                    imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
-                    contentDescription = if (expanded) {
-                        stringResource(R.string.show_less)
-                    } else {
-                        stringResource(R.string.show_more)
-                    }
-                )
+
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.tim.taiwanstock.ui.stocks
+package com.tim.taiwanstock.ui.stocks.company
 
 import android.os.Bundle
 import android.util.Log
@@ -9,11 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import com.tim.taiwanstock.ui.stocks.Stock
 import com.tim.taiwanstock.ui.stocks.compose.BasicsCodelabTheme
 
-// TODO:
-// Show the buy or sell wording
-class StocksFragment : Fragment() {
+class PriceFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
