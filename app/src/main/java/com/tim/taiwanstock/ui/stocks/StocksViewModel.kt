@@ -56,6 +56,7 @@ class StocksViewModel : ViewModel() {
     }
 
     private fun getCurrentDate(): String {
+
         val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
         return LocalDate.now().format(dateFormatter)
     }

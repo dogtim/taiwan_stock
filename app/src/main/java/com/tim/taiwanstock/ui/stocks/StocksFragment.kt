@@ -23,7 +23,7 @@ class StocksFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 BasicsCodelabTheme {
-                    Stock(modifier = Modifier.fillMaxSize())
+                    StockNavHost(modifier = Modifier.fillMaxSize())
                 }
             }
         }

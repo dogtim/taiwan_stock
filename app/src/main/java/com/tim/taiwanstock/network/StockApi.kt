@@ -28,6 +28,14 @@ fun StockDataResponse.getInfo(): String {
     return "Unknown (Unknown)"
 }
 
+fun StockDataResponse.getStockId(): String {
+    val parts = title.split(" ")
+    if (parts.size >= 2) {
+        return parts[1]
+    }
+    return "Unknown"
+}
+
 
 data class StockDataResponse(
     val stat: String,

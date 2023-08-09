@@ -28,7 +28,4 @@
         android:name="com.tim.taiwanstock.ui.stocks.StocksFragment"
         android:label="@string/title_stock" />
 
-    <fragment
-        android:id="@+id/navigation_price"
-        android:name="com.tim.taiwanstock.ui.stocks.company.PriceFragment" />
 </navigation>
