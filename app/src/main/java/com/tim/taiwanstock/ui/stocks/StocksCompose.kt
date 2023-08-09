@@ -41,15 +41,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.gson.Gson
 import com.tim.taiwanstock.R
 import com.tim.taiwanstock.network.StockDataResponse
 import com.tim.taiwanstock.network.closingPrice
 import com.tim.taiwanstock.network.getInfo
 import com.tim.taiwanstock.network.getStockId
+import com.tim.taiwanstock.ui.stocks.company.InputData
 import com.tim.taiwanstock.ui.stocks.company.IntradayInfo
 import com.tim.taiwanstock.ui.stocks.company.StockChart
 import com.tim.taiwanstock.ui.stocks.compose.BasicsCodelabTheme
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun MyApp(modifier: Modifier = Modifier) {
@@ -67,29 +71,34 @@ fun MyApp(modifier: Modifier = Modifier) {
 @Composable
 fun StockNavHost(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "stocks") {
+    NavHost(navController = navController, startDestination = "fake") {
         composable("stocks") {
             Stock(modifier = modifier, onStockClick = { stockId ->
                 navController.navigate("stock/$stockId")
             })
         }
         composable(
-            "stock/{stockId}",
+            //"stock/{stockId}",
+            "fake",
             arguments = listOf(navArgument("stockId") {
                 type = NavType.StringType
             })
         ) {
-            val dummyData = mutableListOf<IntradayInfo>()
+            val inputJson = """
+        {"data":[["112/08/01","567.00"],["112/08/02","561.00"],["112/08/04","554.00"],["112/08/07","558.00"],["112/08/08","552.00"],["112/08/09","554.00"]]}
+    """.trimIndent()
 
-            val currentDate = LocalDateTime.now()
-            val random = java.util.Random()
+            val gson = Gson()
+            val parsedData = gson.fromJson(inputJson, InputData::class.java)
 
-            for (i in 0 until 5) {
-                val date = currentDate.minusDays(i.toLong())
-                val close = 500 + random.nextDouble() * 100 // Generating random close values
-                dummyData.add(IntradayInfo(date, close))
+            val dateFormatter = DateTimeFormatter.ofPattern("yyy/MM/dd")
+
+            val intradayInfoList = parsedData.data.map { entry ->
+                val date = LocalDate.parse(entry[0], dateFormatter)
+                val close = entry[1].toDouble()
+                IntradayInfo(date, close)
             }
-            StockChart(infos = dummyData, modifier = modifier)
+            StockChart(infos = intradayInfoList, modifier = modifier)
         }
     }
 }

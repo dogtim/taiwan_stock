@@ -7,7 +7,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.asAndroidPath
@@ -17,10 +16,11 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.time.LocalDateTime
+import com.google.gson.Gson
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import kotlin.math.round
 import kotlin.math.roundToInt
-
 @Composable
 fun StockChart(
     infos: List<IntradayInfo>,
@@ -49,10 +49,10 @@ fun StockChart(
         val spacePerHour = (size.width - spacing) / infos.size
         (0 until infos.size - 1 step 2).forEach { i ->
             val info = infos[i]
-            val hour = info.date.hour
+            val day = info.date
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
-                    hour.toString(),
+                    day.toString(),
                     spacing + i * spacePerHour,
                     size.height - 5,
                     textPaint
@@ -120,24 +120,29 @@ fun StockChart(
     }
 }
 
-@Preview
-@Composable
-fun test() {
-        val dummyData = mutableListOf<IntradayInfo>()
-
-        val currentDate = LocalDateTime.now()
-        val random = java.util.Random()
-
-        for (i in 0 until 5) {
-            val date = currentDate.minusDays(i.toLong())
-            val close = 500 + random.nextDouble() * 100 // Generating random close values
-            dummyData.add(IntradayInfo(date, close))
-        }
-
-    StockChart(infos = dummyData)
-}
-
 data class IntradayInfo(
-    val date: LocalDateTime,
+    val date: LocalDate,
     val close: Double
 )
+
+data class InputData(val data: List<List<String>>)
+fun main() {
+    val inputJson = """
+        {"data":[["112/08/01","567.00"],["112/08/02","561.00"],["112/08/04","554.00"],["112/08/07","558.00"],["112/08/08","552.00"],["112/08/09","554.00"]]}
+    """.trimIndent()
+
+    val gson = Gson()
+    val parsedData = gson.fromJson(inputJson, InputData::class.java)
+
+    val dateFormatter = DateTimeFormatter.ofPattern("yy/MM/dd")
+
+    val intradayInfoList = parsedData.data.map { entry ->
+        val date = LocalDate.parse(entry[0], dateFormatter)
+        val close = entry[1].toDouble()
+        IntradayInfo(date, close)
+    }
+
+    intradayInfoList.forEach {
+        println("Date: ${it.date}, Close: ${it.close}")
+    }
+}
