@@ -1,8 +1,6 @@
 package com.tim.taiwanstock.ui.stocks
 
-import android.content.Intent
 import android.content.res.Configuration
-import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -48,8 +46,10 @@ import com.tim.taiwanstock.network.StockDataResponse
 import com.tim.taiwanstock.network.closingPrice
 import com.tim.taiwanstock.network.getInfo
 import com.tim.taiwanstock.network.getStockId
+import com.tim.taiwanstock.ui.stocks.company.IntradayInfo
+import com.tim.taiwanstock.ui.stocks.company.StockChart
 import com.tim.taiwanstock.ui.stocks.compose.BasicsCodelabTheme
-
+import java.time.LocalDateTime
 
 @Composable
 fun MyApp(modifier: Modifier = Modifier) {
@@ -79,7 +79,17 @@ fun StockNavHost(modifier: Modifier = Modifier) {
                 type = NavType.StringType
             })
         ) {
-            Stock(modifier = modifier)
+            val dummyData = mutableListOf<IntradayInfo>()
+
+            val currentDate = LocalDateTime.now()
+            val random = java.util.Random()
+
+            for (i in 0 until 5) {
+                val date = currentDate.minusDays(i.toLong())
+                val close = 500 + random.nextDouble() * 100 // Generating random close values
+                dummyData.add(IntradayInfo(date, close))
+            }
+            StockChart(infos = dummyData, modifier = modifier)
         }
     }
 }
