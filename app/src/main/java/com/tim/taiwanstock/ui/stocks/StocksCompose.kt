@@ -250,33 +250,33 @@ private fun CardContent(name: String) {
         }
     }
 }
-
-@Preview(
-    showBackground = true,
-    widthDp = 320,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
-)
-@Preview(showBackground = true, widthDp = 320)
-@Composable
-fun DefaultPreview() {
-    BasicsCodelabTheme {
-        Greetings()
-    }
-}
-
-@Preview(showBackground = true, widthDp = 320, heightDp = 320)
-@Composable
-fun OnboardingPreview() {
-    BasicsCodelabTheme {
-        OnboardingScreen(onContinueClicked = {})
-    }
-}
-
-@Preview
-@Composable
-fun MyAppPreview() {
-    BasicsCodelabTheme {
-        MyApp(Modifier.fillMaxSize())
-    }
-}
+//
+//@Preview(
+//    showBackground = true,
+//    widthDp = 320,
+//    uiMode = Configuration.UI_MODE_NIGHT_YES,
+//    name = "DefaultPreviewDark"
+//)
+//@Preview(showBackground = true, widthDp = 320)
+//@Composable
+//fun DefaultPreview() {
+//    BasicsCodelabTheme {
+//        Greetings()
+//    }
+//}
+//
+//@Preview(showBackground = true, widthDp = 320, heightDp = 320)
+//@Composable
+//fun OnboardingPreview() {
+//    BasicsCodelabTheme {
+//        OnboardingScreen(onContinueClicked = {})
+//    }
+//}
+//
+//@Preview
+//@Composable
+//fun MyAppPreview() {
+//    BasicsCodelabTheme {
+//        MyApp(Modifier.fillMaxSize())
+//    }
+//}
