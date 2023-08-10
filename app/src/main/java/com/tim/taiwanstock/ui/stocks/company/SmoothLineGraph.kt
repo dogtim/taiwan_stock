@@ -115,36 +115,10 @@ fun SmoothLineGraph(graphData: List<IntradayInfo>) {
     }
 }
 
-fun generatePath(data: List<Balance>, size: Size): Path {
-    val path = Path()
-    val numberEntries = data.size - 1
-    val weekWidth = size.width / numberEntries
-
-    val max = data.maxBy { it.amount }
-    val min = data.minBy { it.amount } // will map to x= 0, y = height
-    val range = max.amount - min.amount
-    val heightPxPerAmount = size.height / range.toFloat()
-
-    data.forEachIndexed { i, balance ->
-        if (i == 0) {
-            path.moveTo(
-                0f,
-                size.height - (balance.amount - min.amount).toFloat() *
-                        heightPxPerAmount
-            )
-        }
-        val balanceX = i * weekWidth
-        val balanceY = size.height - (balance.amount - min.amount).toFloat() *
-                heightPxPerAmount
-        path.lineTo(balanceX, balanceY)
-    }
-    return path
-}
-
 fun generateSmoothPath(data: List<IntradayInfo>, size: Size): Path {
     val path = Path()
     val numberEntries = data.size - 1
-    val weekWidth = size.width / numberEntries
+    val dayWidth = size.width / numberEntries
 
     val max = data.maxBy { it.close }
     val min = data.minBy { it.close } // will map to x= 0, y = height
@@ -163,7 +137,7 @@ fun generateSmoothPath(data: List<IntradayInfo>, size: Size): Path {
 
         }
 
-        val balanceX = i * weekWidth
+        val balanceX = i * dayWidth
         val balanceY = size.height - (balance.close - min.close).toFloat() *
                 heightPxPerAmount
         // to do smooth curve graph - we use cubicTo, uncomment section below for non-curve
@@ -173,18 +147,15 @@ fun generateSmoothPath(data: List<IntradayInfo>, size: Size): Path {
             controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y,
             balanceX, balanceY
         )
-
+        //path.lineTo(balanceX, balanceY)
         previousBalanceX = balanceX
         previousBalanceY = balanceY
     }
     return path
 }
 
-data class Balance(val date: LocalDate, val amount: BigDecimal)
-
 val PurpleBackgroundColor = Color(0xff322049)
 val BarColor = Color.White.copy(alpha = 0.3f)
-
 
 @Preview
 @Composable
