@@ -167,7 +167,7 @@ fun CanvasDrawText() {
     val textMeasurer = rememberTextMeasurer()
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        drawText(textMeasurer, "Hello")
+        drawText(textMeasurer, "Hello World!", Offset(x = 120f, y = 0f))
     }
     // [END android_compose_graphics_canvas_draw_text]
 }

@@ -26,13 +26,21 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
-import java.time.LocalDate
 import kotlin.math.roundToInt
 
+@Composable
+fun Dp.toPx() = with(LocalDensity.current) { this@toPx.toPx() }
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun SmoothLineGraph(graphData: List<IntradayInfo>) {
     Box(
@@ -48,7 +56,11 @@ fun SmoothLineGraph(graphData: List<IntradayInfo>) {
             animationProgress.animateTo(1f, tween(3000))
         })
         val coroutineScope = rememberCoroutineScope()
+        val textMeasurer = rememberTextMeasurer()
+        val padding = 8.dp.toPx()
+
         Spacer(
+
             modifier = Modifier
                 .padding(8.dp)
                 .aspectRatio(3 / 2f)
@@ -69,6 +81,22 @@ fun SmoothLineGraph(graphData: List<IntradayInfo>) {
                     filledPath.close()
 
                     onDrawBehind {
+                        val textStyle = TextStyle(
+                            color = Color.White,
+                            fontSize = 12.sp
+                        )
+                        drawText(textMeasurer, "balance.date.toString()", style = textStyle)
+                        val numberEntries = graphData.size - 1
+                        val dayWidth = size.width / numberEntries
+                        graphData.forEachIndexed { i, balance ->
+                            val balanceX = i * dayWidth
+                            drawText(
+                                textMeasurer,
+                                balance.date.toString(),
+                                Offset(x = balanceX, y = size.height - 10.dp.toPx())
+                            )
+                        }
+
                         val barWidthPx = 1.dp.toPx()
                         drawRect(BarColor, style = Stroke(barWidthPx))
 
@@ -156,37 +184,3 @@ fun generateSmoothPath(data: List<IntradayInfo>, size: Size): Path {
 
 val PurpleBackgroundColor = Color(0xff322049)
 val BarColor = Color.White.copy(alpha = 0.3f)
-
-@Preview
-@Composable
-fun CoordinateSystem(){
-    Box(modifier = Modifier.fillMaxSize().drawBehind {
-        val barWidthPx = 1.dp.toPx()
-
-        drawRect(Color.White)
-        val verticalLines = size.width / 80.dp.toPx()
-        val verticalSize = size.width / (verticalLines + 1)
-        repeat(verticalLines.roundToInt()) { i ->
-            val startX = verticalSize * (i + 1)
-            drawLine(
-                Color.Gray,
-                start = Offset(startX, 0f),
-                end = Offset(startX, size.height),
-                strokeWidth = barWidthPx
-            )
-        }
-
-        val horizontalLines = size.height / 80.dp.toPx()
-        val sectionSize = size.height / (horizontalLines + 1)
-        repeat(horizontalLines.roundToInt()) { i ->
-            val startY = sectionSize * (i + 1)
-            drawLine(
-                BarColor,
-                start = Offset(0f, startY),
-                end = Offset(size.width, startY),
-                strokeWidth = barWidthPx
-            )
-        }
-
-    })
-}
