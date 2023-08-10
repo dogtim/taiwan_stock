@@ -1,8 +1,6 @@
 package com.tim.taiwanstock.ui.stocks.company
 
 import android.graphics.PointF
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -34,9 +32,9 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.time.LocalDate
 import kotlin.math.roundToInt
-@Preview
+
 @Composable
-fun SmoothLineGraph() {
+fun SmoothLineGraph(graphData: List<IntradayInfo>) {
     Box(
         modifier = Modifier
             .background(PurpleBackgroundColor)
@@ -143,14 +141,14 @@ fun generatePath(data: List<Balance>, size: Size): Path {
     return path
 }
 
-fun generateSmoothPath(data: List<Balance>, size: Size): Path {
+fun generateSmoothPath(data: List<IntradayInfo>, size: Size): Path {
     val path = Path()
     val numberEntries = data.size - 1
     val weekWidth = size.width / numberEntries
 
-    val max = data.maxBy { it.amount }
-    val min = data.minBy { it.amount } // will map to x= 0, y = height
-    val range = max.amount - min.amount
+    val max = data.maxBy { it.close }
+    val min = data.minBy { it.close } // will map to x= 0, y = height
+    val range = max.close - min.close
     val heightPxPerAmount = size.height / range.toFloat()
 
     var previousBalanceX = 0f
@@ -159,14 +157,14 @@ fun generateSmoothPath(data: List<Balance>, size: Size): Path {
         if (i == 0) {
             path.moveTo(
                 0f,
-                size.height - (balance.amount - min.amount).toFloat() *
+                size.height - (balance.close - min.close).toFloat() *
                         heightPxPerAmount
             )
 
         }
 
         val balanceX = i * weekWidth
-        val balanceY = size.height - (balance.amount - min.amount).toFloat() *
+        val balanceY = size.height - (balance.close - min.close).toFloat() *
                 heightPxPerAmount
         // to do smooth curve graph - we use cubicTo, uncomment section below for non-curve
         val controlPoint1 = PointF((balanceX + previousBalanceX) / 2f, previousBalanceY)
@@ -181,25 +179,6 @@ fun generateSmoothPath(data: List<Balance>, size: Size): Path {
     }
     return path
 }
-
-// date + balance
-// list of date + balanc
-val graphData = listOf(
-    Balance(LocalDate.now(), BigDecimal(65631)),
-    Balance(LocalDate.now().plusWeeks(1), BigDecimal(65931)),
-    Balance(LocalDate.now().plusWeeks(2), BigDecimal(65851)),
-    Balance(LocalDate.now().plusWeeks(3), BigDecimal(65931)),
-    Balance(LocalDate.now().plusWeeks(4), BigDecimal(66484)),
-    Balance(LocalDate.now().plusWeeks(5), BigDecimal(67684)),
-    Balance(LocalDate.now().plusWeeks(6), BigDecimal(66684)),
-    Balance(LocalDate.now().plusWeeks(7), BigDecimal(66984)),
-    Balance(LocalDate.now().plusWeeks(8), BigDecimal(70600)),
-    Balance(LocalDate.now().plusWeeks(9), BigDecimal(71600)),
-    Balance(LocalDate.now().plusWeeks(10), BigDecimal(72600)),
-    Balance(LocalDate.now().plusWeeks(11), BigDecimal(72526)),
-    Balance(LocalDate.now().plusWeeks(12), BigDecimal(72976)),
-    Balance(LocalDate.now().plusWeeks(13), BigDecimal(73589)),
-)
 
 data class Balance(val date: LocalDate, val amount: BigDecimal)
 
