@@ -134,15 +134,16 @@ fun main() {
     val gson = Gson()
     val parsedData = gson.fromJson(inputJson, InputData::class.java)
 
-    val dateFormatter = DateTimeFormatter.ofPattern("yy/MM/dd")
+    val dateFormatter = DateTimeFormatter.ofPattern("yyy/MM/dd")
 
-    val intradayInfoList = parsedData.data.map { entry ->
-        val date = LocalDate.parse(entry[0], dateFormatter)
+    val list = parsedData.data.map { entry ->
+        var date = LocalDate.parse(entry[0], dateFormatter)
+        date = date.plusYears(1911L)
         val close = entry[1].toDouble()
         IntradayInfo(date, close)
     }
 
-    intradayInfoList.forEach {
+    list.forEach {
         println("Date: ${it.date}, Close: ${it.close}")
     }
 }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import com.tim.taiwanstock.ui.stocks.company.SmoothLineGraph
 import com.tim.taiwanstock.ui.stocks.compose.BasicsCodelabTheme
 
 // TODO:
@@ -23,7 +24,8 @@ class StocksFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 BasicsCodelabTheme {
-                    StockNavHost(modifier = Modifier.fillMaxSize())
+                    // StockNavHost(modifier = Modifier.fillMaxSize())
+                    SmoothLineGraph()
                 }
             }
         }
