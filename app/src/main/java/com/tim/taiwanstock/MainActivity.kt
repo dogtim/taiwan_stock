@@ -1,12 +1,15 @@
 package com.tim.taiwanstock
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.tim.lib.download.DownloadViewModel
+import com.tim.lib.download.DownloadViewModelFactory
 import com.tim.lib.download.HelloLib
 import com.tim.taiwanstock.databinding.ActivityMainBinding
 
@@ -35,7 +38,9 @@ class MainActivity : AppCompatActivity() {
         printHelloLib()
     }
 
+    private val viewModel: DownloadViewModel by viewModels { DownloadViewModelFactory(application) }
     fun printHelloLib() {
         HelloLib().sayHello()
+        viewModel.testRun()
     }
 }

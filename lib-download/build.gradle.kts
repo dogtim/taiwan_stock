@@ -32,7 +32,11 @@ android {
     }
 }
 
+val workVersion = "2.8.1"
+
 dependencies {
+
+    implementation("androidx.work:work-runtime-ktx:$workVersion")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
