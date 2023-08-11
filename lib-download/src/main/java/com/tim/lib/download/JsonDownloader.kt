@@ -2,54 +2,46 @@ package com.tim.lib.download
 
 import android.content.Context
 import android.util.Log
-import androidx.room.Room
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
-import com.tim.lib.download.database.AppDatabase
-import com.tim.lib.download.network.ApiService
+import com.google.gson.Gson
 import com.tim.lib.download.network.StockDataApi
+import com.tim.lib.download.network.StockDataConstant
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 private const val TAG = "JsonDownloader"
 class JsonDownloader(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
+    companion object {
+        const val KEY_DATE = "KEY_DATE"
+        const val KEY_STOCK_NO = "KEY_STOCK_NO"
+    }
+
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl("https://www.twse.com.tw/") // Replace with your base URL
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
     override suspend fun doWork(): Result {
-        Log.i(TAG, "Start fetching")
-        initDownload()
+        Log.i(TAG, "doWork: start")
         sleep()
-        Log.i(TAG, "Saving image")
         return try {
-            val resourceUri = inputData.getString(KEY_IMAGE_URI)
-            if (!resourceUri.isNullOrEmpty()) {
-                val output = Data.Builder().putString(KEY_IMAGE_URI, resourceUri).build()
-                Result.success(output)
-            } else {
-                Log.e(TAG, "Writing to MediaStore failed")
-                Result.failure()
-            }
+            Result.success(getData(inputData.getString(KEY_DATE)!!, inputData.getString(KEY_STOCK_NO)!!))
         } catch (exception: Exception) {
             exception.printStackTrace()
             Result.failure()
         }
     }
-    val date = "20230811"
-    val stockNo = "2330"
-    private suspend fun initDownload() {
-        val apiService: StockDataApi
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.twse.com.tw/") // Replace with your base URL
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        apiService = retrofit.create(StockDataApi::class.java)
+    private suspend fun getData(date: String, stockNo: String): Data {
+        val apiService: StockDataApi = retrofit.create(StockDataApi::class.java)
         val response = apiService.downloadCsv(date, stockNo)
+        val gson = Gson()
+        val dataString = gson.toJson(response.data)
         Log.i(TAG, response.toString())
-
-        val db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "database-name"
-        ).build()
+        return Data.Builder()
+            .putString(StockDataConstant.KEY_DATE, response.date)
+            .putString(StockDataConstant.KEY_DATA, dataString)
+            .build()
     }
 }

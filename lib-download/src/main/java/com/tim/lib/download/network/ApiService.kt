@@ -33,3 +33,11 @@ data class StockData(
     val data: List<List<String>>,
     val total: Int
 )
+object StockDataConstant {
+    const val KEY_DATE = "Date"
+    const val KEY_DATA = "DATA"
+    const val KEY_DIVIDEND_YEAR = "Dividend Year"
+    const val KEY_PRICE_TO_EARNINGS_RATIO = "Price-to-Earnings Ratio"
+    const val KEY_PRICE_TO_BOOK_RATIO = "Price-to-Book Ratio"
+    const val KEY_FINANCIAL_REPORT_YEAR_QUARTER = "Financial Report Year/Quarter"
+}

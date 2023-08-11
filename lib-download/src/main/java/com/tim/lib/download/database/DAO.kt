@@ -1,8 +1,10 @@
 package com.tim.lib.download.database
 
+import android.content.Context
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Room
 
 
 @Dao
@@ -22,3 +24,13 @@ interface CompanyDataDao {
     @Query("SELECT * FROM company_data WHERE company_id = :companyId")
     suspend fun getCompanyDataByCompanyId(companyId: Long): List<CompanyData>
 }
+
+class DataBaseManager(applicationContext: Context) {
+    init {
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "database-stock"
+        ).build()
+    }
+}
+

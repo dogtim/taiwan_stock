@@ -1,7 +1,6 @@
 package com.tim.lib.download
 
 import android.app.Application
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.Constraints
@@ -25,13 +24,17 @@ class DownloadViewModel(application: Application) : ViewModel() {
         workManager.cancelUniqueWork(IMAGE_MANIPULATION_WORK_NAME)
     }
 
+    val workInfo =
+        workManager.getWorkInfosByTagLiveData(Constants.TAG_OUTPUT)
+
     /**
      * Creates the input data bundle which includes the Uri to operate on
      * @return Data which contains the Image Uri as a String
      */
-    private fun createInputDataForUri(): Data {
+    private fun createInputData(): Data {
         val builder = Data.Builder()
-        builder.putString(KEY_IMAGE_URI, "Tim wowowo")
+        builder.putString(JsonDownloader.KEY_DATE, "20230811")
+        builder.putString(JsonDownloader.KEY_STOCK_NO, "2330")
         return builder.build()
     }
 
@@ -41,7 +44,7 @@ class DownloadViewModel(application: Application) : ViewModel() {
             .setConstraints(constraints)
             .addTag(TAG_OUTPUT)
 
-        saveBuilder.setInputData(createInputDataForUri())
+        saveBuilder.setInputData(createInputData())
         val continuation = workManager
             .beginUniqueWork(
                 IMAGE_MANIPULATION_WORK_NAME,
