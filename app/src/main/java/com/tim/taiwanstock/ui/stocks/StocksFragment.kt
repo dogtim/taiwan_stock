@@ -46,6 +46,7 @@ class StocksFragment : Fragment() {
                         IntradayInfo(date, close)
                     }
                     SmoothLineGraph(list)
+                    //StockNavHost(modifier = Modifier.fillMaxSize())
                 }
             }
         }

@@ -1,6 +1,8 @@
 package com.tim.lib.download
 
 import android.util.Log
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 private const val TAG = "WorkerUtils"
 fun sleep() {
@@ -9,4 +11,9 @@ fun sleep() {
     } catch (e: InterruptedException) {
         Log.e(TAG, e.message.toString())
     }
+}
+
+fun getCurrentDate(): String {
+    val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+    return LocalDate.now().format(dateFormatter)
 }

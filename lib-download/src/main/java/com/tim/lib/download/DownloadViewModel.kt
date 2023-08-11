@@ -38,7 +38,7 @@ class DownloadViewModel(application: Application) : ViewModel() {
 
     fun testRun() {
         val constraints = Constraints.Builder().build()
-        val saveBuilder = OneTimeWorkRequestBuilder<CSVDownloader>()
+        val saveBuilder = OneTimeWorkRequestBuilder<JsonDownloader>()
             .setConstraints(constraints)
             .addTag(TAG_OUTPUT)
 

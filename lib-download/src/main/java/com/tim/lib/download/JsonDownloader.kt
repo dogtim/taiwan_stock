@@ -4,17 +4,14 @@ import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.Data
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.tim.lib.download.network.ApiService
+import com.tim.lib.download.network.StockDataApi
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-/**
- * Saves the csv to database
- */
-private const val TAG = "CSVDownloader"
-
-class CSVDownloader(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
+private const val TAG = "JsonDownloader"
+class JsonDownloader(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
     override suspend fun doWork(): Result {
         Log.i(TAG, "Start fetching")
         initDownload()
@@ -39,14 +36,15 @@ class CSVDownloader(ctx: Context, params: WorkerParameters) : CoroutineWorker(ct
     // Failed: java.util.concurrent.ExecutionException: javax.net.ssl.SSLHandshakeException:
     // java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.
     private suspend fun initDownload() {
-        val apiService: ApiService
+        val apiService: StockDataApi
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://www.twse.com.tw/") // Replace with your base URL
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        apiService = retrofit.create(ApiService::class.java)
+        apiService = retrofit.create(StockDataApi::class.java)
         val response = apiService.downloadCsv(date, stockNo)
-        Log.i(TAG, response.string())
+        Log.i(TAG, response.toString())
     }
 }

@@ -71,7 +71,7 @@ fun MyApp(modifier: Modifier = Modifier) {
 @Composable
 fun StockNavHost(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "fake") {
+    NavHost(navController = navController, startDestination = "stocks") {
         composable("stocks") {
             Stock(modifier = modifier, onStockClick = { stockId ->
                 navController.navigate("stock/$stockId")

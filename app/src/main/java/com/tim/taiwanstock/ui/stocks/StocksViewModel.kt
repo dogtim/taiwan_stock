@@ -3,6 +3,7 @@ package com.tim.taiwanstock.ui.stocks
 import LoggingInterceptor
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tim.lib.download.getCurrentDate
 import com.tim.taiwanstock.network.StockApiService
 import com.tim.taiwanstock.network.StockDataResponse
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,11 +56,7 @@ class StocksViewModel : ViewModel() {
         }
     }
 
-    private fun getCurrentDate(): String {
 
-        val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        return LocalDate.now().format(dateFormatter)
-    }
 }
 
 data class StockItem(
