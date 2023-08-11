@@ -127,11 +127,11 @@ fun SmoothLineGraph(graphData: List<IntradayInfo>) {
                 .drawWithCache {
                     onDrawBehind {
                         val textStyle = TextStyle(
-                            color = Color.White,
-                            fontSize = 10.sp
+                            color = Color.Yellow,
+                            fontSize = 8.sp
                         )
                         val numberEntries = graphData.size - 1
-                        val dayWidth = size.width / numberEntries
+                        val dayWidth = (size.width - 2 * paddingDp.toPx()) / numberEntries
                         graphData.forEachIndexed { i, balance ->
                             if (i == graphData.size - 1) {
                                 return@forEachIndexed
@@ -141,7 +141,7 @@ fun SmoothLineGraph(graphData: List<IntradayInfo>) {
 
                             val date = "$dayOfMonth / $month"
 
-                            val balanceX = i * dayWidth + paddingDp.toPx() // - (textMeasurer.measure(date).size.width / 2)
+                            val balanceX = i * dayWidth + paddingDp.toPx() - (textMeasurer.measure(date).size.width / 2) + 5
 
                             drawText(
                                 textMeasurer,
