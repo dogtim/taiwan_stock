@@ -2,9 +2,11 @@ package com.tim.lib.download
 
 import android.content.Context
 import android.util.Log
+import androidx.room.Room
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
+import com.tim.lib.download.database.AppDatabase
 import com.tim.lib.download.network.ApiService
 import com.tim.lib.download.network.StockDataApi
 import retrofit2.Retrofit
@@ -33,8 +35,6 @@ class JsonDownloader(ctx: Context, params: WorkerParameters) : CoroutineWorker(c
     }
     val date = "20230811"
     val stockNo = "2330"
-    // Failed: java.util.concurrent.ExecutionException: javax.net.ssl.SSLHandshakeException:
-    // java.security.cert.CertPathValidatorException: Trust anchor for certification path not found.
     private suspend fun initDownload() {
         val apiService: StockDataApi
 
@@ -46,5 +46,10 @@ class JsonDownloader(ctx: Context, params: WorkerParameters) : CoroutineWorker(c
         apiService = retrofit.create(StockDataApi::class.java)
         val response = apiService.downloadCsv(date, stockNo)
         Log.i(TAG, response.toString())
+
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "database-name"
+        ).build()
     }
 }

@@ -6,8 +6,9 @@ import java.time.format.DateTimeFormatter
 
 private const val TAG = "WorkerUtils"
 fun sleep() {
+    val delayTime: Long = 3000
     try {
-        Thread.sleep(DELAY_TIME_MILLIS, 0)
+        Thread.sleep(delayTime, 0)
     } catch (e: InterruptedException) {
         Log.e(TAG, e.message.toString())
     }
