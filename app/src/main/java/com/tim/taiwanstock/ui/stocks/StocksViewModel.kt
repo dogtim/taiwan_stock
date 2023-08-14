@@ -13,8 +13,6 @@ import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class StocksViewModel : ViewModel() {
     private val retrofit: Retrofit
@@ -38,7 +36,6 @@ class StocksViewModel : ViewModel() {
         retrofit = retrofitBuilder.build()
         stockApiService = retrofit.create(StockApiService::class.java)
     }
-
 
     fun fetchItems() {
         // Fetch your items from wherever you need (e.g., API, database)
